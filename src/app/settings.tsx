@@ -21,7 +21,7 @@ const Settings: React.FC = () => {
                         key={item.id}
                         name={item.name}
                         icon={item.icon}
-
+                        pagelink={item.pagelink}
                     />
                 )
             })}

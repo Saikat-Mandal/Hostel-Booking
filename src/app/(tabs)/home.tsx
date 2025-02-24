@@ -80,6 +80,7 @@ const Home: React.FC = () => {
         { id: '12', icon: <MaterialCommunityIcons name="party-popper" size={24} color="black" />, name: 'Party' },
     ];
 
+
     return (
         <ScrollView className="flex-1 px-6">
             <View className="flex-row items-center mt-20 justify-between">
@@ -105,7 +106,7 @@ const Home: React.FC = () => {
                         placeholderTextColor="gray"
                     />
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/map")}>
                     <Animated.Text style={{ transform: [{ rotate: rotateInterpolate }], fontSize: 40 }}>🌎</Animated.Text>
                 </TouchableOpacity>
             </View>

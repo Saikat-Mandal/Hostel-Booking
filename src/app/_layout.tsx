@@ -71,6 +71,12 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: 'transparent' },
         }}
       />
+      <Stack.Screen
+        name="map"
+        options={{
+          headerShown: false,
+        }}
+      />
 
     </Stack>
   )
