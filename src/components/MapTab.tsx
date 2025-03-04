@@ -9,7 +9,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const MapTab: React.FC<{ location: any; onClose: () => void }> = ({ location, onClose }) => {
     return (
-        <Pressable onPress={() => router.push("/home")} >
+        <Pressable onPress={() => router.push({ pathname: "/[hostel]", params: { hostel: location.id } })}>
             <TouchableOpacity onPress={onClose} className=' self-end mb-8 '>
                 <MaterialIcons className='bg-white rounded-full p-2' name="close" size={20} color="black" />
             </TouchableOpacity>

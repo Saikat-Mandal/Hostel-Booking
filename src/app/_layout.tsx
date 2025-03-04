@@ -77,6 +77,12 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="[hostel]"
+        options={{
+          headerShown: false,
+        }}
+      />
 
     </Stack>
   )
