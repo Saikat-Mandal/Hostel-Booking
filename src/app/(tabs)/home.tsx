@@ -1,4 +1,4 @@
-import { View, Text, Platform, Animated, Easing, TextInput, ScrollView, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Platform, Animated, Easing, TextInput, ScrollView, FlatList, TouchableOpacity, Pressable, Image } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
@@ -16,11 +16,14 @@ import { router } from 'expo-router';
 import Caraousal from '@/components/Caraousal';
 import Offers from '@/components/Offers';
 
+import image from '../../assets/images/c1.jpg';
+
 const Home: React.FC = () => {
     const rotateAnim = useRef(new Animated.Value(0)).current;
     const [search, setSearch] = useState('');
     const [curlocation, setCurlocation] = useState('');
     const [tab, setTab] = useState('Love'); // Set "Love" as the default tab
+    const [hostel, setHostel] = useState(null); // Set "Love" as the default tab
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     useEffect(() => {
@@ -67,18 +70,48 @@ const Home: React.FC = () => {
 
     const data = [
         { id: '1', icon: <MaterialCommunityIcons name="calendar-heart" size={24} color="black" />, name: 'Love' },
-        { id: '2', icon: <Feather name="plus-circle" size={24} color="black" />, name: 'New' },
+        // { id: '2', icon: <Feather name="plus-circle" size={24} color="black" />, name: 'New' },
         { id: '3', icon: <FontAwesome name="arrow-up" size={24} color="black" />, name: 'North' },
         { id: '4', icon: <FontAwesome name="arrow-down" size={24} color="black" />, name: 'South' },
         { id: '5', icon: <FontAwesome name="arrow-left" size={24} color="black" />, name: 'West' },
-        { id: '6', icon: <FontAwesome6 name="mountain" size={24} color="black" />, name: 'Mountain' },
-        { id: '7', icon: <MaterialCommunityIcons name="beach" size={24} color="black" />, name: 'Beach' },
-        { id: '8', icon: <Entypo name="globe" size={24} color="black" />, name: 'Offbeat' },
-        { id: '9', icon: <FontAwesome6 name="person-skiing" size={24} color="black" />, name: 'Adventure' },
-        { id: '10', icon: <Entypo name="laptop" size={24} color="black" />, name: 'Workathon' },
-        { id: '11', icon: <FontAwesome6 name="city" size={24} color="black" />, name: 'City' },
-        { id: '12', icon: <MaterialCommunityIcons name="party-popper" size={24} color="black" />, name: 'Party' },
+        // { id: '6', icon: <FontAwesome6 name="mountain" size={24} color="black" />, name: 'Mountain' },
+        // { id: '7', icon: <MaterialCommunityIcons name="beach" size={24} color="black" />, name: 'Beach' },
+        // { id: '8', icon: <Entypo name="globe" size={24} color="black" />, name: 'Offbeat' },
+        // { id: '9', icon: <FontAwesome6 name="person-skiing" size={24} color="black" />, name: 'Adventure' },
+        // { id: '10', icon: <Entypo name="laptop" size={24} color="black" />, name: 'Workathon' },
+        // { id: '11', icon: <FontAwesome6 name="city" size={24} color="black" />, name: 'City' },
+        // { id: '12', icon: <MaterialCommunityIcons name="party-popper" size={24} color="black" />, name: 'Party' },
     ];
+
+    useEffect(() => {
+        try {
+            const getHostels = async () => {
+                let res: any
+                if (tab === "Love") {
+                    res = await fetch(`http://192.168.29.221:8080/api/v1/hostel`)
+                }
+                else if (tab === "North") {
+                    res = await fetch(`http://192.168.29.221:8080/api/v1/hostel/northfilter?latitude=28.7041`)
+                }
+                else if (tab === "South") {
+                    res = await fetch("http://192.168.29.221:8080/api/v1/hostel/southfilter?latitude=24.5000")
+                }
+                else if (tab === "West") {
+                    res = await fetch("http://192.168.29.221:8080/api/v1/hostel/westfilter?longitude=75.00&latitude=31.00")
+                }
+                const json = await res.json()
+                setHostel(json)
+            }
+
+            getHostels()
+        } catch (error) {
+
+        }
+
+    }, [hostel])
+
+    // console.log(hostel);
+
 
 
     return (
@@ -126,8 +159,67 @@ const Home: React.FC = () => {
                         </TouchableOpacity>
                     )}
                 />
-                <Text className="text-center text-lg mt-5">You selected {tab}!</Text>
+
+
+                <View>
+                    {hostel?.length > 0 ? (
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            {/* First 3x3 Grid */}
+                            <View style={{ width: 300, height: 350, marginRight: 10 }}>
+                                <FlatList
+                                    data={hostel.slice(0, 9)} // Take only first 9 items for first grid
+                                    numColumns={3}
+                                    scrollEnabled={false}
+                                    keyExtractor={(item, index) => `grid1-${index}`}
+                                    renderItem={({ item }) => (
+                                        <Pressable
+                                            className="mt-3 items-center"
+                                            style={{ width: '33%' }}
+                                            onPress={() => router.push({ pathname: "/[hostel]", params: { hostelId: item.id } })}
+                                        >
+                                            <Image
+                                                source={image}
+                                                className="h-20 w-20 rounded-full"
+                                            />
+                                            <Text className="text-center text-xs mt-1" numberOfLines={2}>{item.name}</Text>
+                                        </Pressable>
+                                    )}
+                                />
+                            </View>
+
+                            {/* Additional grids if more than 9 items */}
+                            {hostel.length > 9 && (
+                                <View style={{ width: 300, height: 300 }}>
+                                    <FlatList
+                                        data={hostel.slice(9)} // Take remaining items
+                                        numColumns={3}
+                                        scrollEnabled={false}
+                                        keyExtractor={(item, index) => `grid2-${index}`}
+                                        renderItem={({ item }) => (
+                                            <Pressable
+                                                className="mt-3 items-center"
+                                                style={{ width: '33%' }}
+                                                onPress={() => router.push({ pathname: "/[hostel]", params: { hostelId: item.id } })}
+                                            >
+                                                <Image
+                                                    source={image}
+                                                    className="h-20 w-20 rounded-full"
+                                                />
+                                                <Text className="text-center text-xs mt-1" numberOfLines={2}>{item.name}</Text>
+                                            </Pressable>
+                                        )}
+                                    />
+                                </View>
+                            )}
+                        </ScrollView>
+                    ) : (
+                        <Text className="text-center my-4">No hostels found</Text>
+                    )}
+                </View>
+
+
             </View>
+
 
             {/* Offers */}
             <View>
