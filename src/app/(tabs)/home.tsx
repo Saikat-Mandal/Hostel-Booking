@@ -95,17 +95,14 @@ const Home: React.FC = () => {
                 <Text>📍 {curlocation || errorMsg || 'Set Location'}</Text>
             </Pressable>
 
+            {/* search  */}
             <View className="flex-row items-center mt-4 justify-between">
-                <View className="border-gray-400 border rounded-full flex-row items-center p-3">
+                <Pressable onPress={() => router.push("/search")} className="border-gray-400 border rounded-full flex-row items-center p-3" >
                     <AntDesign name="search1" size={24} color="black" className="px-3" />
-                    <TextInput
-                        onChangeText={(e) => setSearch(e)}
-                        placeholder="Search"
-                        value={search}
-                        className="w-4/6 text-xl text-black font-fmedium"
-                        placeholderTextColor="gray"
-                    />
-                </View>
+                    <View className=' w-2/3'>
+                        <Text>Search</Text>
+                    </View>
+                </Pressable>
                 <TouchableOpacity onPress={() => router.push("/map")}>
                     <Animated.Text style={{ transform: [{ rotate: rotateInterpolate }], fontSize: 40 }}>🌎</Animated.Text>
                 </TouchableOpacity>

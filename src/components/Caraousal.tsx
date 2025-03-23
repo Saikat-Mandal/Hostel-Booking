@@ -1,4 +1,4 @@
-import { View, Dimensions, Text } from 'react-native';
+import { View, Dimensions, Text, Pressable } from 'react-native';
 import React from 'react';
 import Animated, { useSharedValue, useAnimatedScrollHandler, useAnimatedStyle, interpolate } from 'react-native-reanimated';
 
@@ -6,11 +6,21 @@ import image1 from '../assets/images/c1.jpg';
 import image2 from '../assets/images/c2.jpg';
 import image3 from '../assets/images/c3.jpg';
 import image4 from '../assets/images/c4.jpg';
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get('screen');
 const imageWidth = width * 0.7;
 const imageHeight = imageWidth * 1.76;
 const gaping = 5; // Spacing between images
+
+
+const data = [
+    { id: 1, image: image1, name: "The Hosteller Agra" },
+    { id: 2, image: image2, name: "The Hosteller Amritsar" },
+    { id: 3, image: image3, name: "The Hosteller Bangalore" },
+    { id: 4, image: image4, name: "The Hosteller Bhandardara" },
+];
+
 
 
 const Photo = ({ item, index, scrollX }) => {
@@ -49,9 +59,9 @@ const Photo = ({ item, index, scrollX }) => {
                 resizeMode="cover"
                 style={[{ width: '100%', height: '100%', borderRadius: 30 }, animatedStyle]}
             />
-            <Text className='bg-primary text-black rounded-full p-4 absolute bottom-4 left-4 font-fbold'>
-                {item.name}
-            </Text>
+            <Pressable onPress={() => router.push({ pathname: "/[hostel]", params: { hostelId: item.id } })}>
+                <Text className='bg-primary text-black rounded-full p-4 absolute bottom-4 left-4 font-fbold'>{item.name}</Text>
+            </Pressable>
             <Text className='bg-green-400 text-black rounded-full text-sm p-2 absolute top-4 right-4 font-fbold'>
                 Launch 🎉
             </Text>
@@ -61,12 +71,6 @@ const Photo = ({ item, index, scrollX }) => {
 };
 
 const Caraousal = () => {
-    const data = [
-        { id: 1, image: image1, name: "Hosteller Hanle" },
-        { id: 2, image: image2, name: "Hosteller Shilma" },
-        { id: 3, image: image3, name: "Hosteller Tawang" },
-        { id: 4, image: image4, name: "Hosteller Ooty" },
-    ];
 
     const scrollX = useSharedValue(0);
 
@@ -75,10 +79,8 @@ const Caraousal = () => {
     });
 
     return (
-        <View className='my-10'>
-            <View>
+        <View className='my-10' >
 
-            </View>
             <Animated.FlatList
                 data={data}
                 horizontal

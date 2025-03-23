@@ -78,11 +78,18 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
+        name="search"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="[hostel]"
         options={{
           headerShown: false,
         }}
       />
+
 
     </Stack>
   )
